@@ -87,10 +87,19 @@ export async function POST(req: NextRequest) {
 
   // 5. Return the PDF as a response
   const pdfBytes = await pdfDoc.save();
-  return new Response(pdfBytes, {
+ 
+  // explicitly copy into a new Uint8Array (recommended)
+  const copiedUint8Array = new Uint8Array(pdfBytes.length);
+  copiedUint8Array.set(pdfBytes);
+
+  // Then create Blob from copiedUint8Array
+  const blob = new Blob([copiedUint8Array], { type: 'application/pdf' });
+
+  return new Response(blob, {
     headers: {
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; fileprocedure="${month}-profit-report.pdf"`,
+      'Content-Disposition': `attachment; filename="${month}-profit-report.pdf"`,
     },
   });
+
 }
