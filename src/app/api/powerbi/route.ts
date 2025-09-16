@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
             username: session.user.email,
             roles: ['UserRole'], // RLS role
             datasets: [PBI_DATASET_ID],
-            customData: selectedMonth, 
+            customData:  existPost.id.toString(),
           },
         ],
       },
